@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Model.Car;
 import Utils.Util;
 
@@ -45,19 +48,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Car getCar(int id){
+    public Car getCar(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(Util.TABLE_NAME, new String[] {Util.KEY_ID,
-                Util.KEY_NAME, Util.KEY_PRICE},
-                Util.KEY_ID + "=?", new String[] {String.valueOf(id)},
-                null, null ,
+        Cursor cursor = db.query(Util.TABLE_NAME, new String[]{Util.KEY_ID,
+                        Util.KEY_NAME, Util.KEY_PRICE},
+                Util.KEY_ID + "=?", new String[]{String.valueOf(id)},
+                null, null,
                 null, null);
-        if(cursor != null){
+        if (cursor != null) {
             cursor.moveToFirst();
         }
 
         return new Car(Integer.parseInt(cursor.getString(0)), cursor.getString(1),
                 cursor.getString(2));
+    }
+
+    public List<Car> getAllCars() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        List<Car> carsList = new ArrayList<>();
+
+        String selectCars = "SELECT * FROM " + Util.TABLE_NAME;
+        Cursor cursor = db.rawQuery(selectCars, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Car car = new Car();
+                car.setId(Integer.parseInt(cursor.getString(0)));
+                car.setName(cursor.getString(1));
+                car.setPrice(cursor.getString(2));
+
+                carsList.add(car);
+            } while (cursor.moveToNext());
+        }
+        return carsList;
     }
 }
