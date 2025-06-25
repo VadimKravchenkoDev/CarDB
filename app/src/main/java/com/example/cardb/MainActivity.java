@@ -29,11 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
 
-
-        Car car = databaseHandler.getCar(0);
+        Car car = databaseHandler.getCar(1);
         Log.d("Car Info", "ID " + car.getId() + ", name " + car.getName() +
                 ", price" + car.getPrice());
-
 
      }
 }
