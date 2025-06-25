@@ -30,8 +30,12 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
 
         Car car = databaseHandler.getCar(1);
-        Log.d("Car Info", "ID " + car.getId() + ", name " + car.getName() +
-                ", price" + car.getPrice());
 
+        car.setName("Tesla");
+        car.setPrice("55000");
+        int updateCarId = databaseHandler.updateCar(car);
+
+        Log.d("Car Info", "ID " + car.getId() + ", name " + car.getName() +
+                ", price " + car.getPrice() + " updateCarId " + updateCarId);
      }
 }
