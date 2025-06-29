@@ -29,13 +29,29 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
 
-        Car car = databaseHandler.getCar(1);
+   /*     databaseHandler.addCar(new Car("Toyota", "30000"));
+        databaseHandler.addCar(new Car("Opel", "20000"));
+        databaseHandler.addCar(new Car("BMW", "50000"));
+        databaseHandler.addCar(new Car("Mercedes", "50000"));
+        databaseHandler.addCar(new Car("Hyundai", "50000"));*/
+        List<Car> carList = databaseHandler.getAllCars();
+
+
+       /* Car deletingCar = databaseHandler.getCar(1);
+        databaseHandler.deleteCar(deletingCar);*/
+        for (Car car : carList) {
+            Log.d("Car Info", "ID " + car.getId() + " name " + car.getName() +
+                    ", price" + car.getPrice());
+        }
+       /* Car car = databaseHandler.getCar(1);
 
         car.setName("Tesla");
         car.setPrice("55000");
         int updateCarId = databaseHandler.updateCar(car);
 
         Log.d("Car Info", "ID " + car.getId() + ", name " + car.getName() +
-                ", price " + car.getPrice() + " updateCarId " + updateCarId);
-     }
+                ", price " + car.getPrice() + " updateCarId " + updateCarId);*/
+
+
+    }
 }
