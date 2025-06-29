@@ -51,17 +51,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Car getCar(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(Util.TABLE_NAME, new String[]{Util.KEY_ID,
-                        Util.KEY_NAME, Util.KEY_PRICE},
-                Util.KEY_ID + "=?", new String[]{String.valueOf(id)},
+        Cursor cursor = db.query(Util.TABLE_NAME, new String[] {Util.KEY_ID, Util.KEY_NAME,
+                        Util.KEY_PRICE}, Util.KEY_ID + "=?", new String[] {String.valueOf(id)},
                 null, null,
                 null, null);
+        Car car = new Car();
         if (cursor != null) {
-            cursor.moveToFirst();
+            try {
+                cursor.moveToFirst();
+                car = new Car(Integer.parseInt(cursor.getString(0)),
+                        cursor.getString(1), cursor.getString(2));
+            } finally {
+                cursor.close();
+            }
+
         }
 
-        return new Car(Integer.parseInt(cursor.getString(0)), cursor.getString(1),
-                cursor.getString(2));
+        return car;
     }
 
     public List<Car> getAllCars() {
@@ -72,18 +78,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String selectCars = "SELECT * FROM " + Util.TABLE_NAME;
         Cursor cursor = db.rawQuery(selectCars, null);
         if (cursor.moveToFirst()) {
-            do {
-                Car car = new Car();
-                car.setId(Integer.parseInt(cursor.getString(0)));
-                car.setName(cursor.getString(1));
-                car.setPrice(cursor.getString(2));
+            try {
+                do {
+                    Car car = new Car();
+                    car.setId(Integer.parseInt(cursor.getString(0)));
+                    car.setName(cursor.getString(1));
+                    car.setPrice(cursor.getString(2));
 
-                carsList.add(car);
-            } while (cursor.moveToNext());
+                    carsList.add(car);
+                } while (cursor.moveToNext());
+            } finally {
+                cursor.close();
+            }
         }
         return carsList;
     }
-    public int updateCar(Car car){
+
+    public int updateCar(Car car) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -91,22 +102,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(Util.KEY_PRICE, car.getPrice());
 
         return db.update(Util.TABLE_NAME, contentValues, Util.KEY_ID + " =?",
-               new String[]{String.valueOf(car.getId())});
+                new String[]{String.valueOf(car.getId())});
     }
-    public void deleteCar(Car car){
+
+    public void deleteCar(Car car) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(Util.TABLE_NAME,  Util.KEY_ID + " =?",
+        db.delete(Util.TABLE_NAME, Util.KEY_ID + " =?",
                 new String[]{String.valueOf(car.getId())});
 
         db.close();
     }
 
-    public int getCarsCount(){
+    public int getCarsCount() {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String countQuery = "SELECT * FROM " + Util.TABLE_NAME;
-        Cursor cursor = db.rawQuery(countQuery,null);
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = -1;
+        if (cursor != null) {
+            try {
+                count = cursor.getCount();
+            } finally {
+                cursor.close();
+            }
+
+        }
         return cursor.getCount();
     }
 }
