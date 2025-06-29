@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
-
+        Log.d("carsCount", String.valueOf(databaseHandler.getCarsCount()));
    /*     databaseHandler.addCar(new Car("Toyota", "30000"));
         databaseHandler.addCar(new Car("Opel", "20000"));
         databaseHandler.addCar(new Car("BMW", "50000"));
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         List<Car> carList = databaseHandler.getAllCars();
 
 
-       /* Car deletingCar = databaseHandler.getCar(1);
+        /*Car deletingCar = databaseHandler.getCar(7);
         databaseHandler.deleteCar(deletingCar);*/
         for (Car car : carList) {
             Log.d("Car Info", "ID " + car.getId() + " name " + car.getName() +
