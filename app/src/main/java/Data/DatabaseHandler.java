@@ -116,9 +116,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public int getCarsCount() {
         SQLiteDatabase db = this.getReadableDatabase();
-
         String countQuery = "SELECT * FROM " + Util.TABLE_NAME;
         Cursor cursor = db.rawQuery(countQuery, null);
+
         int count = -1;
         if (cursor != null) {
             try {
@@ -126,8 +126,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } finally {
                 cursor.close();
             }
-
         }
-        return cursor.getCount();
+        return count;
     }
+
 }
